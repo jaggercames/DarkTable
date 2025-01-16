@@ -136,6 +136,14 @@ def delete_all_players():
 
 # Classe para lidar com as requisições HTTP
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_OPTIONS(self):
+        # Responde às requisições preflight
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, DELETE, PUT')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+        
     def do_GET(self):
         # Verifica a requisição para /check_player/{playerName}
         if self.path.startswith('/check_player/'):
@@ -143,6 +151,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             exists = check_player(player_name)
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(json.dumps({'exists': exists}).encode())
 
@@ -150,6 +159,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             players = get_players()
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(json.dumps({'players': players}).encode())
 
@@ -175,6 +185,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             if not player_name:
                 self.send_response(400)
                 self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': "'name' é obrigatório"}).encode())
                 return
@@ -184,11 +195,13 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
                 players = get_players()
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps({'success': True, 'players': players}).encode())
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': f'Erro ao deletar jogador: {str(e)}'}).encode())
 
@@ -204,6 +217,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             if 'name' not in data:
                 self.send_response(400)
                 self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': "'name' é obrigatório"}).encode())
                 return
@@ -235,6 +249,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
                 if check_player(name):  # Verifica se o jogador já existe
                     self.send_response(400)
                     self.send_header('Content-type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
                     self.wfile.write(json.dumps({'error': 'Jogador já existe'}).encode())
                     return
@@ -242,6 +257,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
                     add_player(name, hp, state, blood_level, trauma, furtivo, fisico, resistencia, pontaria, agilidade, persuasao, conhecimento, reflexo, pilotagem, investigacao, intimidacao, luta, inteligencia, dice_roll)
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
                     self.wfile.write(json.dumps({'message': 'Jogador adicionado com sucesso'}).encode())
 
@@ -250,17 +266,20 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
                     update_player(name, hp, state, blood_level, trauma, furtivo, fisico, resistencia, pontaria, agilidade, persuasao, conhecimento, reflexo, pilotagem, investigacao, intimidacao, luta, inteligencia, dice_roll)
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
                     self.wfile.write(json.dumps({'message': 'Jogador atualizado com sucesso'}).encode())
                 else:
                     self.send_response(404)
                     self.send_header('Content-type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
                     self.wfile.write(json.dumps({'error': 'Jogador não encontrado'}).encode())
 
         except Exception as e:
             self.send_response(500)
             self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(json.dumps({'error': f'Erro ao processar a requisição: {str(e)}'}).encode())
 
