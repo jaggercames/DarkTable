@@ -1,0 +1,317 @@
+       .diceDivPlayer{
+            color: var(--dicerollcolor);
+        }
+        :root {
+  --dicerollcolor: gray; /* Variável CSS inicial */
+}
+        .player-state-image {
+            width: 25px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: 25px; /* Ajuste para manter a proporção */
+            margin-right: 10px; /* Espaço entre a imagem e o texto */
+            vertical-align: middle; /* Alinha a imagem ao meio do texto */
+        }
+
+        .img-flag {
+            width: 20px; /* Ajuste o tamanho da imagem conforme necessário */
+            margin-right: 10px; /* Espaço entre a imagem e o texto */
+        }
+        @font-face {
+            font-family: 'MinhaFonte';
+            src: url('fontmain.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            margin: 0; /* Remove margens padrão */
+            padding: 0; /* Remove espaçamento padrão */
+            background-image: url('rndimages/bricks.jpg'); /* Substitua pelo caminho da sua imagem */
+            background-repeat: repeat; /* Faz a imagem se repetir para preencher toda a tela */
+            background-size: auto; /* Mantém o tamanho original da imagem */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: 'MinhaFonte', Courier, monospace;
+            font-size: 23px;
+        }
+
+        .player-item {
+    margin: 20px auto;
+    border: 1px solid #ffffff56;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.377);
+    background-image: url('rndimages/ficha.jpg');
+    background-repeat: repeat; /* Faz a imagem se repetir para preencher toda a tela */
+    background-size: 100%; 
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    overflow: hidden;
+    display: inline-block;     /* Faz com que os itens fiquem na mesma linha */
+    width: 700px;              /* Ajuste da largura conforme necessário */
+    margin: 10px;              /* Espaçamento entre os itens */
+    position: relative;        /* Isso permite posicionar elementos dentro de .player-item de forma absoluta */
+}
+
+/* players backgrounds */
+
+.player-item-dead {
+    background-image: url(rndimages/playerdead.png) !important;
+}
+
+
+.player-info {
+    margin: 20px auto;
+    margin-bottom: 5px;
+    word-wrap: break-word; /* Permite que o texto quebre a linha */
+    overflow-wrap: break-word; /* Garantia de que palavras longas irão quebrar */
+}
+
+.playerCardDeadImage img {
+    position: absolute;
+    height: 700px;
+    z-index: 999999;
+    margin-top: 109px;
+    z-index: 9999;
+}
+
+.playerCardInsaneImage img {
+  position: absolute;
+  height: 700px;
+  z-index: 999999;
+  margin-top: 109px;
+  z-index: 9999;
+}
+
+.playerCardTerminalImage img {
+  position: absolute;
+  height: 700px;
+  z-index: 999999;
+  margin-top: 109px;
+  z-index: 9999;
+}
+
+.playerCardAnxiousImage img {
+  position: absolute;
+  height: 700px;
+  z-index: 999999;
+  margin-top: 109px;
+  z-index: 9999;
+}
+
+.playerCardRestrainedImage img {
+  position: absolute;
+  height: 700px;
+  z-index: 999999;
+  margin-top: 109px;
+  z-index: 9999;
+}
+
+.playerCardHemoImage img {
+  position: absolute;
+  height: 700px;
+  z-index: 999999;
+  margin-top: 109px;
+  z-index: 9999;
+}
+
+.player-status {
+    font-weight: bold;
+}
+
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        label, p, button, input, select {
+            font-size: 20px;
+            font-family: 'MinhaFonte', Courier, monospace;
+        }
+
+        button {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #clearPlayers {
+            position: absolute;
+            top: 20px;
+            right: 20px;  
+        }
+
+    .dice_roll2 {
+    width: 150px; /* Largura do elemento */
+    height: 100px; /* Altura do elemento */
+    background-image: url(/rndimages/divbck1.png); /* Imagem de fundo */
+    background-size: 100%; /* Ajusta o tamanho da imagem de fundo */
+    display: flex; /* Define um contêiner flexível */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Peso da fonte */
+    margin-right: 50px; /* Espaço entre as divs */
+    color: rgb(161, 161, 161);
+}
+.dice_roll {
+    position: absolute;
+    top: 55px;  /* Distância do topo da .player-item */
+    right: 10px; /* Distância da borda direita da .player-item */
+    width: 150px;
+    height: 100px;
+    background-image: url(/rndimages/divbck1.png);
+    background-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(161, 161, 161);
+}
+.textdice {
+    top: 25px;
+    right: 70px;
+    position: absolute;
+}
+
+.Critico {
+    color: green !important;  /* Usando !important para garantir que a cor seja aplicada */
+}
+
+.Falha {
+    color: red !important;
+}
+
+.Normal {
+    color: rgb(161, 161, 161) !important;
+}
+
+.info-button {
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(204, 204, 204);
+}
+
+.info-box {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 300px;
+  font-size: 14px;
+  position: absolute;
+  z-index: 100;
+  top: 50px;
+}
+
+.close-btn {
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+.deathimage {
+    background-size: 50%;
+}
+.deadPlayerCard {
+    filter: blur(5px);
+}
+
+.display {
+    display: block !important;
+}
+.serverCommunicationError {
+    width: 100%;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: none;
+    position: fixed;
+    top: 0;
+}
+button {
+    width: fit-content;
+    min-width: 100px;
+    height: 45px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2.5px solid #969696; 
+    box-shadow: 0px 0px 20px -20px;
+    cursor: pointer;
+    background-color: rgb(59, 43, 43);
+    transition: all 0.2s ease-in-out 0ms;
+    user-select: none;
+    font-family: 'Goudy Bookletter 1911', serif; 
+    color: aliceblue;
+  }
+  
+  button:hover {
+    background-color: #791616;
+    box-shadow: 0px 0px 20px -18px;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+
+.medieval-button {
+    padding: 10px 20px;
+    background-image: url(rndimages/ficha.jpg); 
+    color: #3b3b3b; 
+    border: 2px solid #969696; 
+    font-family: 'Goudy Bookletter 1911', serif; 
+    font-size: 18px;
+    text-shadow: 1px 1px 0px #171931;
+    box-shadow: 2px 2px 0px #171931; 
+    border-radius: 4px; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .medieval-button:hover {
+    background-image: url(rndimages/hover.jpg);
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.3);
+
+  }
+  
+  .medieval-button:active {
+    box-shadow: inset 1px 1px 2px 0px rgba(0, 0, 0, 0.5); 
+    transform: translateY(2px); 
+  }
+
+  .typewriter h1 {
+  overflow: hidden; 
+  border-right: .15em solid orange; 
+  white-space: nowrap; 
+  margin: 0 auto; 
+  letter-spacing: .15em; 
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}

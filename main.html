@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icons/d20.png" type="image/x-icon">
+    <title>DarkTable</title>
+    <button class="medieval-button" id="clearPlayers">Limpar Jogadores</button>
+</head>
+<body>
+    <header>
+        <div id="serverCommunicationError" class="serverCommunicationError">Erro ao consultar Servidor.</div>
+    </header>
+
+    <img src="rndimages/darktable.png" style="display: block; margin: 20px auto; width: 15%; height: auto;">
+      <div style="display: flex; justify-content: center; gap: 20px;">
+    <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px; ">
+        <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Personagem</label><br>
+
+        <label for="name" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/name.jpg">Nome:</label>
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required style="background-image: url(rndimages/inputbck.jpg);  color: white;" pattern="[A-Za-z0-9 ]+">
+        <script>  //Garantir que o name é um texto válido, pra ser colocado na database.
+  document.getElementById("name").addEventListener("input", function(event) {
+    let inputValue = event.target.value;
+
+    // Remove acentos e caracteres especiais
+    inputValue = inputValue.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // Remove caracteres especiais (permitindo apenas letras e números, sem espaços)
+    inputValue = inputValue.replace(/[^a-zA-Z0-9]/g, "");
+
+    // Atualiza o valor do input com o texto corrigido
+    event.target.value = inputValue;
+  });
+          </script>
+        <br>
+        <!--Primeiro formulário, onde o usuário coloca as principais informações de registro do player.-->
+        <label for="hp" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/life.jpg">Vida:</label>
+        <input type="number" id="hp" name="hp" placeholder="Digite sua vida" required style="background-image: url(rndimages/inputbck.jpg);  color: white;" required>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/state.jpg">Estado:</label><br>
+        <!--Seleção de status do jogador.-->
+        <select style="width: 250px; height: 50px; font-size: 16px; padding: 5px;" id="state" required style="background-image: url(rndimages/inputbck.jpg);">
+            <option value="Consciente" data-icon="icons/consi.jpg">Consciente</option>
+            <option value="Lento" data-icon="icons/sloww.jpg" class="enlarged">Lento</option>
+            <option value="Sonolento" data-icon="icons/sleepy.jpg">Sonolento</option>
+            <option value="Dormindo" data-icon="icons/sleeping.jpg">Dormindo</option>
+            <option value="Desmaiado" data-icon="icons/uncon.jpg">Desmaiado</option>
+            <option value="Sangrando" data-icon="icons/bleed.jpg">Sangrando</option>
+            <option value="Hemorragia" data-icon="icons/hemo.jpg">Hemorragia</option>
+            <option value="Envenenado" data-icon="icons/poisoned.jpg">Envenenado</option>
+            <option value="Paralisado" data-icon="icons/parali.jpg">Paralisado</option>
+            <option value="Preso" data-icon="icons/preso2.jpg">Preso</option>
+            <option value="Ansioso" data-icon="icons/ansioso.jpg">Ansioso</option>
+            <option value="Insano" data-icon="icons/insano.jpg">Insano</option> 
+            <option value="Estado Terminal" data-icon="icons/estterminal.jpg">Estado Terminal</option>
+            <option value="Morto" data-icon="icons/death.jpg">Morto</option>            
+        </select>
+        <br>
+        <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/blood.jpg">Nivel de Sangue (%):</label>
+        <input type="number" id="blood_level" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg);  color: white;" required>
+        <br>
+        <label for="trauma" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/fear.jpg">Trauma:</label>
+        <input type="text" id="trauma" placeholder="Descreva o trauma" required  style="background-image: url(rndimages/inputbck.jpg);  color: white;" required><br>
+        <br>
+        <button class="medieval-button" type="enter" id="enterButton" style="color: rgb(204, 204, 204);">Inserir/Atualizar</button>
+    </form>
+    <!--Formulário de rolamento de dados.-->
+    <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px;">
+        <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Dados</label><br>
+        <br>
+        <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/dice.png">Dado:</label>
+        <select style="width: 250px; height: 30px; font-size: 16px; padding: 5px;" id="dices" required style="background-image: url(rndimages/inputbck.jpg);">
+            <option value="2">D2</option>  
+            <option value="4">D4</option>  
+            <option value="6">D6</option>   
+            <option value="8">D8</option>  
+            <option value="10">D10</option>  
+            <option value="12">D12</option>  
+            <option value="20">D20</option>  
+            <option value="100">D100</option>  
+        </select>
+        <br>
+        <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/att.png">Atributo adicional</label>
+        <select style="width: 250px; height: 30px; font-size: 16px; padding: 5px;" id="dicesatt" required style="background-image: url(rndimages/inputbck.jpg);">
+            <option value="Nulo">Nulo</option> 
+            <option value="Fisico">Físico</option>  
+            <option value="Resistencia">Resistência</option>  
+            <option value="Pontaria">Pontaria</option>   
+            <option value="Agilidade">Agilidade</option>  
+            <option value="Persuasao">Persuasão</option>  
+            <option value="Conhecimento">Conhecimento</option>  
+            <option value="Reflexo">Reflexo</option>  
+            <option value="Pilotagem">Pilotagem</option>  
+            <option value="Investigacao">Investigação</option>  
+            <option value="Intimidacao">Intimidação</option>  
+            <option value="Luta">Luta</option>  
+            <option value="Inteligencia">Inteligência</option>  
+        </select><br>
+        <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/bonus.png">Bonus</label>
+        <input type="number" name ="bonus_roll" id="bonus_roll" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg);  color: white;">
+        <br><br>
+        <div class="info-button" onclick="toggleInfo()"> 
+        <label for="blood_level" style="font-size: 20px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/finaldiceroll.png"> Resultado Final [?]:</label>
+    </div>
+          <div id="info-box" class="info-box" style="display: none;">
+            <span class="close-btn" onclick="toggleInfo()">&times;</span>
+            <p>A leitura do resultado do dado é feita da seguinte forma: O número após a letra 'D' indica o número de faces do dado utilizado (exemplo: D6 é um dado de 6 lados). O número entre colchetes representa, na ordem, o valor obtido na rolagem do dado e a soma desse valor com os bônus dos atributos adicionados antes da rolagem.</p>
+          </div>
+        <div id="dice_roll" class ="dice_roll2">0</div>
+        <br>
+        <button class="medieval-button" type="button" id="rollDicebtn" style="color: rgb(204, 204, 204);">Rolar Dado</button>
+    </form>
+    <!--Formulário de preenchimento de dados do jogador, sendo atributos numéricos envolvidos no rolamento de dados do jogador e exibição do form da database.-->
+    <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px;">
+        <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Atributos do Jogador</label><br>
+        <div style="width: 100%; height: 400px; overflow-y: auto; padding: 10px; box-sizing: border-box;">
+            <label for="fisico" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/fis.png">Físico</label>
+            <input type="number" id="fisico" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="resistencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/res.jpg">Resistência</label>
+            <input type="number" id="resistencia" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="pontaria" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/pon.jpg">Pontaria</label>
+            <input type="number" id="pontaria" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="agilidade" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/agi.jpg">Agilidade</label>
+            <input type="number" id="agilidade" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="persuasao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/per.jpg">Persuasão</label>
+            <input type="number" id="persuasao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="conhecimento" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/conhe.jpg">Conhecimento</label>
+            <input type="number" id="conhecimento" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="reflexo" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/ref.jpg">Reflexo</label>
+            <input type="number" id="reflexo" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="pilotagem" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/pilo.jpg">Pilotagem</label>
+            <input type="number" id="pilotagem" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="investigacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/inves.jpg">Investigação</label>
+            <input type="number" id="investigacao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="intimidacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/intimi.jpg">Intimidação</label>
+            <input type="number" id="intimidacao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="luta" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/luta.jpg">Luta</label>
+            <input type="number" id="luta" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        
+            <label for="inteligencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="icons/int.jpg">Inteligência</label>
+            <input type="number" id="inteligencia" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(rndimages/inputbck.jpg); color: white;">
+        </div>
+        
+        <br>
+    </form>
+
+</div>
+    <div class="player-list" id="playerList">
+        <h2 style="color: rgb(204, 204, 204); background-color: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.418); width: 450px; border: 1px solid #ffffff56; margin-left: 20px;
+        margin: 20px auto;"><img src="icons/players.jpg"> Jogadores Conectados:</h2>
+    </div>
+    <script>
+        // Função para normalizar o texto
+    </script>
+        <link rel="stylesheet" href="style.css">
+        <script src="mainscript.js"></script>
+</body>
+</html>
