@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <link rel="icon" href="./images/icons/d20.png" type="image/x-icon">
     <title>DarkTable</title>
-    <button class="medieval-button" id="clearPlayers">Limpar Jogadores</button>
 </head>
 <body>
+    <button class="medieval-button" type="button" id="toggleAutoRefresh" 
+        style="color: rgb(204, 204, 204); font-size: 16px; 
+               position: fixed; 
+               top: 20px; 
+               right: 20px; 
+               z-index: 1000;">
+    Recarregamento Automático: Off
+</button>
     <header>
         <div id="serverCommunicationError" class="serverCommunicationError">Erro ao consultar Servidor.</div>
     </header>
@@ -18,10 +25,20 @@
     <img src="./images/darktable.png" style="display: block; margin: 20px auto; width: 15%; height: auto;">
       <div style="display: flex; justify-content: center; gap: 20px;">
     <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px; ">
+        <div style="width: 100%; height: 500px; overflow-y: auto; padding: 10px; box-sizing: border-box;">
         <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Personagem</label><br>
-
         <label for="name" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/name.jpg">Nome:</label>
-        <input type="text" id="name" name="name" placeholder="Digite seu nome" required style="background-image: url(./images/inputbck.jpg);  color: white;" pattern="[A-Za-z0-9 ]+">
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required style="background-image: url(./images/inputbck.jpg);  color: white;" pattern="[A-Za-z0-9\[\]]+([A-Za-z0-9\[\]]+)*"><br>
+        <label for="trauma" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/realname.jpg">Nome do Jogador:</label>
+        <input type="text" id="realname" placeholder="Descreva o trauma" required  style="background-image: url(./images/inputbck.jpg);  color: white;" required><br>
+        <label for="obs" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/skills.jpg" style="width: 9%;"> Habilidades:</label>
+        <textarea id="skills" placeholder="Insira suas skills..." required
+        style="background-image: url(./images/inputbck.jpg); color: white; 
+               width: 100%; height: 100px; resize: none; 
+               padding: 10px; box-sizing: border-box; 
+               overflow-y: auto;"></textarea>
+        <label for="playerClass" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/class.png">Classe:</label>
+        <input type="text" id="playerClass" name="playerClass" placeholder="Digite sua classe" required style="background-image: url(./images/inputbck.jpg);  color: white;" pattern="[A-Za-z0-9\[\]]+([A-Za-z0-9\[\]]+)*">
         <br>
         <!--Primeiro formulário, onde o usuário coloca as principais informações de registro do player.-->
         <label for="hp" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/life.jpg">Vida:</label>
@@ -49,11 +66,30 @@
         <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/blood.jpg">Nivel de Sangue (%):</label>
         <input type="number" id="blood_level" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg);  color: white;" required>
         <br>
+        <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/adrenalina.jpg" style="width: 9%;">Adrenalina:</label><br>
+        <div id="adrenalina" style="color: white; font-size: 75%;">
+            <label style="color: white; font-size: 75%;"></label>
+            <input type="radio" name="adrenalina" value="0" required> Nulo
+            <input type="radio" name="adrenalina" value="1"> 1
+            <input type="radio" name="adrenalina" value="2"> 2
+            <input type="radio" name="adrenalina" value="3"> 3
+            <input type="radio" name="adrenalina" value="4"> 4
+            <input type="radio" name="adrenalina" value="5"> 5</div><br>
+        
         <label for="trauma" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/fear.jpg">Trauma:</label>
         <input type="text" id="trauma" placeholder="Descreva o trauma" required  style="background-image: url(./images/inputbck.jpg);  color: white;" required><br>
         <br>
+        <label for="obs" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/inventory.jpg" style="width: 9%;"> Inventario:</label>
+        <textarea id="obs" placeholder="Insira seus itens aqui..." required
+        style="background-image: url(./images/inputbck.jpg); color: white; 
+               width: 100%; height: 100px; resize: none; 
+               padding: 10px; box-sizing: border-box; 
+               overflow-y: auto;"></textarea>
+               </div>
         <button class="medieval-button" type="enter" id="enterButton" style="color: rgb(204, 204, 204);">Inserir/Atualizar</button>
+        
     </form>
+
     <!--Formulário de rolamento de dados.-->
     <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px;">
         <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Dados</label><br>
@@ -73,41 +109,41 @@
         <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/att.png">Atributo adicional</label>
         <select style="width: 250px; height: 30px; font-size: 16px; padding: 5px;" id="dicesatt" required style="background-image: url(./images/inputbck.jpg);">
             <option value="Nulo">Nulo</option> 
-            <option value="Fisico">Físico</option>  
-            <option value="Resistencia">Resistência</option>  
+            <option value="Fisico">Fisico</option>  
+            <option value="Resistencia">Resistencia</option>  
             <option value="Pontaria">Pontaria</option>   
             <option value="Agilidade">Agilidade</option>  
-            <option value="Persuasao">Persuasão</option>  
+            <option value="Persuasao">Persuasao</option>  
             <option value="Conhecimento">Conhecimento</option>  
             <option value="Reflexo">Reflexo</option>  
             <option value="Pilotagem">Pilotagem</option>  
-            <option value="Investigacao">Investigação</option>  
-            <option value="Intimidacao">Intimidação</option>  
+            <option value="Investigacao">Investigacao</option>  
+            <option value="Intimidacao">Intimidacao</option>  
             <option value="Luta">Luta</option>  
-            <option value="Inteligencia">Inteligência</option>  
+            <option value="Inteligencia">Inteligencia</option>  
         </select><br>
         <label for="blood_level" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/bonus.png">Bonus</label>
         <input type="number" name ="bonus_roll" id="bonus_roll" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg);  color: white;">
         <br><br>
-        <div class="info-button" onclick="toggleInfo()"> 
+        <div class="info-button" onclick="toggleInfo()">
         <label for="blood_level" style="font-size: 20px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/finaldiceroll.png"> Resultado Final [?]:</label>
     </div>
           <div id="info-box" class="info-box" style="display: none;">
             <span class="close-btn" onclick="toggleInfo()">&times;</span>
             <p>A leitura do resultado do dado é feita da seguinte forma: O número após a letra 'D' indica o número de faces do dado utilizado (exemplo: D6 é um dado de 6 lados). O número entre colchetes representa, na ordem, o valor obtido na rolagem do dado e a soma desse valor com os bônus dos atributos adicionados antes da rolagem.</p>
           </div>
-        <div id="dice_roll" class ="dice_roll2">0</div>
+        <div id="dice_roll" class="dice_roll2" style="font-size: 15px;"">0</div>
         <br>
         <button class="medieval-button" type="button" id="rollDicebtn" style="color: rgb(204, 204, 204);">Rolar Dado</button>
     </form>
     <!--Formulário de preenchimento de dados do jogador, sendo atributos numéricos envolvidos no rolamento de dados do jogador e exibição do form da database.-->
     <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px;">
         <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Atributos do Jogador</label><br>
-        <div style="width: 100%; height: 400px; overflow-y: auto; padding: 10px; box-sizing: border-box;">
-            <label for="fisico" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/fis.png">Físico</label>
+        <div style="width: 100%; height: 500px; overflow-y: auto; padding: 10px; box-sizing: border-box;">
+            <label for="fisico" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/fis.png">Fisico</label>
             <input type="number" id="fisico" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
-            <label for="resistencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/res.jpg">Resistência</label>
+            <label for="resistencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/res.jpg">Resistencia</label>
             <input type="number" id="resistencia" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
             <label for="pontaria" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/pon.jpg">Pontaria</label>
@@ -116,7 +152,7 @@
             <label for="agilidade" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/agi.jpg">Agilidade</label>
             <input type="number" id="agilidade" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
-            <label for="persuasao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/per.jpg">Persuasão</label>
+            <label for="persuasao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/per.jpg">Persuasao</label>
             <input type="number" id="persuasao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
             <label for="conhecimento" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/conhe.jpg">Conhecimento</label>
@@ -128,22 +164,83 @@
             <label for="pilotagem" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/pilo.jpg">Pilotagem</label>
             <input type="number" id="pilotagem" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
-            <label for="investigacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/inves.jpg">Investigação</label>
+            <label for="investigacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/inves.jpg">Investigacao</label>
             <input type="number" id="investigacao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
-            <label for="intimidacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/intimi.jpg">Intimidação</label>
+            <label for="intimidacao" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/intimi.jpg">Intimidacao</label>
             <input type="number" id="intimidacao" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
             <label for="luta" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/luta.jpg">Luta</label>
             <input type="number" id="luta" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         
-            <label for="inteligencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/int.jpg">Inteligência</label>
+            <label for="inteligencia" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/int.jpg">Inteligencia</label>
             <input type="number" id="inteligencia" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
+
+            <label for="sorte" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/intimi.jpg">Sorte</label>
+            <input type="number" id="sorte" oninput="this.setCustomValidity('')" value="0" placeholder="0 a 100" required style="background-image: url(./images/inputbck.jpg); color: white;">
         </div>
         
         <br>
     </form>
-
+    <form id="playerForm" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7); border: 1px solid #ffffff56; width: 300px; ">
+        <label for="int" style="font-size: 25px; font-weight: bold; color: rgb(204, 204, 204); margin: 20px auto; display: block; text-align: center; width: 100%;">Estado Fisico</label><br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/head.png" style="width: 9%; height: auto;">Cabeca</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="head_state" required style="background-image: url(./images/inputbck.jpg);">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/chest.png" style="width: 9%; height: auto;">Peitoral</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="chest_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/rightarm.png" style="width: 9%; height: auto;">Braco Esq.</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="leftarm_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/leftarm.png" style="width: 9%; height: auto;">Braco Dir.</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="rightarm_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/stomach.png" style="width: 9%; height: auto;">Abdomen</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="stomach_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/leftleg.png" style="width: 9%; height: auto;">Perna Esq.</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="leftleg_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option> 
+        </select>
+        <br>
+        <label for="state" style="font-size: 24px; font-weight: bold; color: rgb(204, 204, 204);"><img src="./images/icons/rightleg.png" style="width: 9%; height: auto;">Perna Dir.</label><br>
+        <select style="width: 135px; height: 30px; font-size: 16px; padding: 5px;" id="rightleg_state">
+            <option value="saudavel">Saudavel</option>
+            <option value="ferido">Ferido</option>
+            <option value="critico">Critico</option>
+            <option value="decepado">Decepado</option>         
+        </select>
+        <br>
+    </form>    
 </div>
     <div class="player-list" id="playerList">
         <h2 style="color: rgb(204, 204, 204); background-color: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.418); width: 450px; border: 1px solid #ffffff56; margin-left: 20px;
