@@ -4,6 +4,207 @@
         :root {
   --dicerollcolor: gray; /* Variável CSS inicial */
 }
+
+.image-container {
+  position: relative; /* Define o contêiner como referência para o posicionamento do GIF */
+  display: inline-block; /* Ajusta o tamanho ao conteúdo */
+  width: fit-content; /* Contêiner se ajusta ao tamanho da imagem */
+}
+
+.base-image {
+  width: 100%; /* Ajusta a largura da imagem base */
+  height: auto; /* Mantém a proporção da imagem base */
+  display: block;
+}
+
+.overlay-gif {
+  position: absolute; /* Permite posicionar o GIF sobre a imagem base */
+  top: 0; /* Alinha ao topo */
+  left: 0; /* Alinha à esquerda */
+  width: 100%; /* Faz o GIF ocupar toda a largura da imagem base */
+  height: 100%; /* Faz o GIF ocupar toda a altura da imagem base */
+  pointer-events: none; /* Permite interação com a imagem base sem bloqueios */
+}
+
+.critical {
+  color: red; /* Vermelho */
+}
+
+.healthy {
+  color: green; /* Verde */
+}
+
+.wounded {
+  color: orange; /* Laranja */
+}
+
+.decapitated {
+  color: black; /* Preto */
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Organiza os elementos na vertical */
+  align-items: flex-start; /* Alinha tudo à esquerda */
+  justify-content: flex-start;
+  width: 100%;
+}
+
+#dice-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.body-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto auto;
+  gap: 5px;
+  justify-items: center;
+  align-items: center;
+  width: 180px;
+  margin: 0 auto;
+  background-image: url('../images/divbckbodystatus.png');
+  border: 3px solid #000000;
+  background-size: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  top: 370px;
+  right: 20px;
+  column-gap: 60px;
+  position: absolute;
+}
+
+.body-part {
+  position: relative;
+  text-align: center;
+  color: rgb(204, 204, 204);
+  font-weight: bold;
+  font-size: 14px;
+  min-height: 60px; /* Garante que cada parte tenha altura mínima */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.body-part img {
+  width: 40px;
+  height: 40px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+#head {
+  grid-column: 1 / 3; /* Cabeça ocupa as duas colunas no topo */
+  grid-row: 1; /* Cabeça fica na primeira linha */
+}
+
+#left-arm {
+  grid-column: 1; /* Braço esquerdo fica na primeira coluna */
+  grid-row: 2; /* Braço esquerdo na segunda linha */
+}
+
+#chest {
+  grid-column: 1 / 3; /* Peito ocupa as duas colunas */
+  grid-row: 2; /* Peito na segunda linha */
+}
+
+#right-arm {
+  grid-column: 2; /* Braço direito fica ao lado do peito na segunda coluna */
+  grid-row: 2; /* Braço direito na segunda linha */
+}
+
+#stomach {
+  grid-column: 1 / 3; /* Estômago ocupa as duas colunas */
+  grid-row: 3; /* Estômago na terceira linha */
+}
+
+#left-leg {
+  grid-column: 1; /* Perna esquerda na primeira coluna */
+  grid-row: 4; /* Perna esquerda na quarta linha */
+}
+
+#right-leg {
+  grid-column: 2; /* Perna direita na segunda coluna */
+  grid-row: 4; /* Perna direita na quarta linha */
+}
+
+.player-info {
+  color: rgb(204, 204, 204);
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.textdice {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(204, 204, 204);
+  display: flex;
+  align-items: center;
+}
+.adrenalina-progress {
+  width: 25%; /* Define o tamanho da barra */
+  height: 10px; /* Tamanho da altura da barra */
+  border-radius: 4px; /* Borda arredondada */
+  background-color: #000000; /* Cor de fundo da barra */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 3px solid black; /* Borda preta de 2px */
+}
+
+.adrenalina-progress::-webkit-progress-bar {
+  background-color: #000000; /* Cor do fundo da barra */
+  border-radius: 10px;
+}
+
+.adrenalina-progress::-webkit-progress-value {
+  background: linear-gradient(
+    to right,
+    #200000, /* Vermelho escuro */
+    #3b0000 /* Vermelho claro */
+  );
+  border-radius: 10px;
+}
+
+.adrenalina-progress::-moz-progress-bar {
+  background: linear-gradient(
+    to right,
+    #1d0000, /* Vermelho escuro */
+    #300000 /* Vermelho claro */
+  );
+  border-radius: 10px;
+}
+.textbody {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(204, 204, 204);
+  display: flex;
+  align-items: center;
+  top: 360px;
+  right: 40px;
+  position: absolute;
+}
+
+.dice-roll-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
         .player-state-image {
             width: 25px; /* Ajuste o tamanho da imagem conforme necessário */
             height: 25px; /* Ajuste para manter a proporção */
@@ -35,7 +236,7 @@
             font-size: 23px;
         }
 
-        .player-item {
+    .player-item {
     margin: 20px auto;
     border: 1px solid #ffffff56;
     padding: 10px;
@@ -57,11 +258,12 @@
 
 .player-item-dead {
     background-image: url(../images/playerdead.png) !important;
+
 }
 
 
 .player-info {
-    margin: 20px auto;
+    margin: 10px auto;
     margin-bottom: 5px;
     word-wrap: break-word; /* Permite que o texto quebre a linha */
     overflow-wrap: break-word; /* Garantia de que palavras longas irão quebrar */
@@ -115,6 +317,26 @@
   z-index: 9999;
 }
 
+/* Estiliza a barra de rolagem apenas para a div com a classe obsdiv */
+.obsdiv {
+  scrollbar-width: thin; /* Barra de rolagem fina (para Firefox) */
+  scrollbar-color: lightgray transparent; /* Cor da barra e do fundo (Firefox) */
+}
+
+/* Para navegadores baseados em Webkit (Chrome, Edge, Safari, etc.) */
+.obsdiv::-webkit-scrollbar {
+  width: 8px; /* Largura da barra de rolagem */
+}
+
+.obsdiv::-webkit-scrollbar-thumb {
+  background: lightgray; /* Cor da barra de rolagem */
+  border-radius: 4px; /* Cantos arredondados */
+}
+
+.obsdiv::-webkit-scrollbar-track {
+  background: transparent; /* Fundo da barra de rolagem */
+}
+
 .player-status {
     font-weight: bold;
 }
@@ -159,7 +381,7 @@
 }
 .dice_roll {
     position: absolute;
-    top: 55px;  /* Distância do topo da .player-item */
+    top: 110px;  /* Distância do topo da .player-item */
     right: 10px; /* Distância da borda direita da .player-item */
     width: 150px;
     height: 100px;
@@ -173,9 +395,16 @@
     color: rgb(161, 161, 161);
 }
 .textdice {
-    top: 25px;
+    top: 80px;
     right: 70px;
     position: absolute;
+}
+
+.obsdiv {
+  background-image: url(../images/inputbck.jpg);
+  border-radius: 15px;
+  background-size: 100%;
+
 }
 
 .Critico {
@@ -204,9 +433,13 @@
   margin-top: 10px;
   width: 300px;
   font-size: 14px;
-  position: absolute;
+  position: fixed; /* Tornando a posição fixa */
   z-index: 100;
-  top: 50px;
+  top: 50px; /* Distância do topo da tela */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajusta para manter a centralização */
+  
+  
 }
 
 .close-btn {
